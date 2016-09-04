@@ -6,7 +6,7 @@ defmodule Toki.Parser do
   use Toki.Unit.Minute, :parse
   use Toki.Unit.Second, :parse
 
-  @spec parse(String.t, String.t) :: Toki.DateTime
+  @spec parse(String.t, String.t) :: Toki.DateTime.t
   def parse(value, pattern) do
     Toki.Pattern.compile(pattern)
     |> Regex.named_captures(value)

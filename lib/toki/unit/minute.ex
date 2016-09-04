@@ -1,5 +1,7 @@
 defmodule Toki.Unit.Minute do
+  @moduledoc false
   use Toki.Unit
+  import Toki.DateTime
 
   pattern "mm", "[0-5][0-9]"
   pattern "m",  "[0-5]?[0-9]"
@@ -11,8 +13,18 @@ defmodule Toki.Unit.Minute do
   format "m",  "~B",     &Toki.DateTime.get_minute/1
 
   def get(%Toki.DateTime{minute: minute}), do: minute
-  def set(%Toki.DateTime{} = date, minute) when is_integer(minute) and minute in 0..59 do
-    %{date | minute: minute} 
+
+  def set(date, value) when is_integer(value) and value in 0..59 do
+    %{date | minute: value}
+  end
+
+  def add(date, value) when is_integer(value) do
+    minute = get_minute(date) + value
+    {hour, minute} = Toki.Util.positive_rem(minute, 60)
+
+    date
+    |> add_hour(hour)
+    |> set_minute(minute)
   end
 
   def parse_minute(value, date) do

@@ -1,5 +1,7 @@
 defmodule Toki.Unit.Month do
+  @moduledoc false
   use Toki.Unit
+  import Toki.DateTime
 
   pattern "MM", "0[1-9]|1[0-2]"
   pattern "M",  "0?[1-9]|1[0-2]"
@@ -11,8 +13,19 @@ defmodule Toki.Unit.Month do
   format "M",  "~B",     &Toki.DateTime.get_month/1
 
   def get(%Toki.DateTime{month: month}), do: month
-  def set(%Toki.DateTime{} = date, month) when is_integer(month) and month in 1..12 do
-    %{date | month: month}
+
+  def set(date, value) when is_integer(value) and value in 1..12 do
+    date = %{date | month: value}
+    set_day(date, get_day(date))
+  end
+
+  def add(date, value) when is_integer(value) do
+    month = get_month(date) + value
+    {year, month} = Toki.Util.positive_rem(month, 12)
+
+    date
+    |> add_year(year)
+    |> set_month(month)
   end
 
   def parse_month(value, date) do

@@ -1,5 +1,7 @@
 defmodule Toki.Unit.Year do
+  @moduledoc false
   use Toki.Unit
+  import Toki.DateTime
 
   pattern "YYYY","\\d{4}"
   pattern "Y",   "\\d{1,4}"
@@ -11,10 +13,18 @@ defmodule Toki.Unit.Year do
   format "Y",    "~B",     &Toki.DateTime.get_year/1
 
   def get(%Toki.DateTime{year: year}), do: year
-  def set(%Toki.DateTime{} = date, year) when is_integer(year), do: %{date | year: year}
+
+  def set(%Toki.DateTime{} = date, value) when is_integer(value) do
+    date = %{date | year: value}
+    set_month(date, get_month(date))
+  end
+
+  def add(date, value) when is_integer(value) do
+    set_year(date, get_year(date) + value)
+  end
 
   def parse_year(value, date) do
     {int, ""} = Integer.parse(value)
-    Toki.DateTime.set_year(date, int)
+    set_year(date, int)
   end
 end

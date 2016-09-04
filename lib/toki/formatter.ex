@@ -6,6 +6,7 @@ defmodule Toki.Formatter do
   use Toki.Unit.Minute, :format
   use Toki.Unit.Second, :format
 
+  @spec format(Toki.DateTime.t, String.t) :: String.t
   def format(date, pattern) do
     do_format(pattern, date, "", [])
   end
@@ -13,5 +14,18 @@ defmodule Toki.Formatter do
   defp do_format("", _, format, values) do
     :io_lib.format(String.to_charlist(format), Enum.reverse(values))
     |> :erlang.iolist_to_binary
+  end
+
+  defp do_format("[" <> rest, date, format, values) do
+    [str, rest] = case String.split(rest, "]", parts: 2) do
+      [str, rest] -> [str, rest]
+      [rest] -> ["[", rest]
+    end
+
+    do_format(rest, date, format <> str, values)
+  end
+
+  defp do_format(<<h::binary-size(1), rest::binary>>, date, format, values) do
+    do_format(rest, date, format <> h, values)
   end
 end

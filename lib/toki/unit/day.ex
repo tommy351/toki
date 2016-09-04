@@ -1,5 +1,7 @@
 defmodule Toki.Unit.Day do
+  @moduledoc false
   use Toki.Unit
+  import Toki.DateTime
 
   pattern "DD", "0[1-9]|[12][0-9]|3[0-1]"
   pattern "D",  "0?[1-9]|[12][0-9]|3[0-1]"
@@ -11,8 +13,19 @@ defmodule Toki.Unit.Day do
   format "D",  "~B",     &Toki.DateTime.get_day/1
 
   def get(%Toki.DateTime{day: day}), do: day
-  def set(%Toki.DateTime{} = date, day) when is_integer(day) and day in 1..31 do
-    %{date | day: day} 
+
+  def set(date, value) when is_integer(value) and value in 1..31 do
+    last_day = :calendar.last_day_of_the_month(get_year(date), get_month(date))
+    day = Enum.min([last_day, value])
+
+    %{date | day: day}
+  end
+
+  def add(date, value) when is_integer(value) do
+    {y, m, d} = Toki.Util.day_number(get_year(date), get_month(date), get_day(date)) + value
+    |> Toki.Util.date
+
+    %{date | year: y, month: m, day: d}
   end
 
   def parse_day(value, date) do

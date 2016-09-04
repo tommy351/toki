@@ -11,18 +11,21 @@ defmodule Toki.Unit do
     end
   end
 
+  @spec pattern(String.t, String.t) :: Macro.t
   defmacro pattern(token, pattern) do
     quote location: :keep do
       @patterns {unquote(token), unquote(pattern)}
     end
   end
 
+  @spec parse(String.t, fun) :: Macro.t
   defmacro parse(token, parser) do
     quote location: :keep do
       @parsers {unquote(token), unquote(Macro.escape(parser))}
     end
   end
 
+  @spec format(String.t, String.t, fun) :: Macro.t
   defmacro format(token, format, formatter) do
     quote location: :keep do
       @formatters {unquote(token), unquote(format), unquote(Macro.escape(formatter))}
@@ -73,7 +76,7 @@ defmodule Toki.Unit do
     |> Enum.map(fn {token, parser} ->
       quote do
         defp do_parse([{unquote(token), value} | rest], acc) do
-          unquote(parser).(value, acc)
+          do_parse(rest, unquote(parser).(value, acc))
         end
       end
     end)
