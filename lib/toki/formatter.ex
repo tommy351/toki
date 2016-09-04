@@ -1,5 +1,10 @@
 defmodule Toki.Formatter do
-  use Toki.Unit.Year, :format
+  use Toki.Unit.Year,   :format
+  use Toki.Unit.Month,  :format
+  use Toki.Unit.Day,    :format
+  use Toki.Unit.Hour,   :format
+  use Toki.Unit.Minute, :format
+  use Toki.Unit.Second, :format
 
   def format(date, pattern) do
     do_format(pattern, date, "", [])

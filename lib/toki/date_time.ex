@@ -7,7 +7,12 @@ defmodule Toki.DateTime do
             second: 0,
             nanosecond: 0
 
-  @units year: Toki.Unit.Year
+  @units year: Toki.Unit.Year,
+         month: Toki.Unit.Month,
+         day: Toki.Unit.Day,
+         hour: Toki.Unit.Hour,
+         minute: Toki.Unit.Minute,
+         second: Toki.Unit.Second
 
   for {key, module} <- @units do
     def unquote(:"get_#{key}")(date), do: unquote(module).get(date)

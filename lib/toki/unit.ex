@@ -12,19 +12,19 @@ defmodule Toki.Unit do
   end
 
   defmacro pattern(token, pattern) do
-    quote do
+    quote location: :keep do
       @patterns {unquote(token), unquote(pattern)}
     end
   end
 
   defmacro parse(token, parser) do
-    quote do
+    quote location: :keep do
       @parsers {unquote(token), unquote(Macro.escape(parser))}
     end
   end
 
   defmacro format(token, format, formatter) do
-    quote do
+    quote location: :keep do
       @formatters {unquote(token), unquote(format), unquote(Macro.escape(formatter))}
     end
   end
