@@ -4,7 +4,8 @@ defmodule TokiTest do
 
   test "the truth" do
 
-    IO.inspect Toki.parse("2015", "YYYY")
+    date = Toki.parse("2015", "YYYY")
+    IO.inspect Toki.DateTime.format date, "YYYY"
 
     assert 1 + 1 == 2
   end

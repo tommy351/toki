@@ -5,6 +5,12 @@ defmodule Toki.Unit.Year do
 
   parse "YYYY", fn (value, date) ->
     {int, ""} = Integer.parse(value)
-    %{date | year: int}
+    Toki.DateTime.set_year(date, int)
   end
+
+  format "YYYY", "~4..0B", &Toki.DateTime.get_year/1
+  format "Y", "~B", &Toki.DateTime.get_year/1
+
+  def get(%Toki.DateTime{year: year}), do: year
+  def set(%Toki.DateTime{} = date, year) when is_integer(year), do: %{date | year: year}
 end
