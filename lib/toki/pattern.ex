@@ -1,5 +1,5 @@
 defmodule Toki.Pattern do
-  use Toki.Unit.Year
+  use Toki.Unit.Year, :compile
 
   @spec compile(String.t) :: Regex.t
   def compile(pattern) do
