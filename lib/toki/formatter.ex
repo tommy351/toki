@@ -12,7 +12,7 @@ defmodule Toki.Formatter do
   end
 
   defp do_format("", _, format, values) do
-    :io_lib.format(String.to_charlist(format), Enum.reverse(values))
+    :io_lib.format(:unicode.characters_to_list(format), Enum.reverse(values))
     |> :erlang.iolist_to_binary
   end
 
