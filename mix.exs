@@ -7,6 +7,7 @@ defmodule Toki.Mixfile do
   def project do
     [app: :toki,
      version: @version,
+     description: "Date time parsing and formatting library inspired by Moment.js",
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -39,7 +40,7 @@ defmodule Toki.Mixfile do
     ["coveralls": :test,
      "coveralls.travis": :test,
      "docs": :docs,
-     "hex.docs": :docs,
+     "hex.publish": :docs,
      "inchci.add": :docs,
      "inchci.report": :docs]
   end
